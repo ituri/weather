@@ -8,7 +8,8 @@ echo "Waiting for data..."
 do
     if [[ "${line%%;*}" == '$1' ]] ; then
         echo "Parsing data ..."
-	# format data
+	date
+        # format data
         tmp=`echo "${line#?1;1;}" | tr ';,' ':.'`
         data=`echo "N${tmp%%0}" | sed 's/::/:U:/g' | sed 's/::/:U:/g'`
         data=${data%%:}

@@ -1,3 +1,4 @@
+#!/bin/sh
 rrdtool create weather.rrd --step 900 \
 DS:temps1:GAUGE:1200:-40:50 \
 DS:temps2:GAUGE:1200:-40:50 \
