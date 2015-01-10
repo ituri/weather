@@ -84,8 +84,7 @@ rrdtool graph 'h-1m.png' \
 	'DEF:Wohnzimmer=weather.rrd:hums1:AVERAGE' \
 	'LINE1:Wohnzimmer#33CCFF:Straßenseite'
 
-# Generate the html-file for the current temperature
-#rrdtool lastupdate weather.rrd | tail -1 | sed 's/^.\{,12\}//' | sed 's/\ U//g' | sed 's/ /,/' |  sed 's/^/Aktuelle Temperatur: /' | sed 's/,/°C\ <\/br>Aktuelle\ Luftfeuchtigkeit\ /' | sed 's/$/%/' > aktuell.html
+# Generate the html-file for the current temperature (The string manipulation is REALLY ugly - you have been warned!)
 rrdtool lastupdate weather.rrd | tail -1 | sed 's/^.\{,12\}//' | sed 's/\ U//g' | awk '{print $1}' | sed 's/$/°C/' > temp.html
 rrdtool lastupdate weather.rrd | tail -1 | sed 's/^.\{,12\}//' | sed 's/\ U//g' | sed 's/^.*\ //' | sed 's/$/%/' > humid.html
 
