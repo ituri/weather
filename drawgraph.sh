@@ -84,6 +84,14 @@ rrdtool graph 'h-1m.png' \
 	'DEF:Wohnzimmer=weather.rrd:hums1:AVERAGE' \
 	'LINE1:Wohnzimmer#33CCFF:Straßenseite'
 
+# Generate the html-file for the current temperature
+#rrdtool lastupdate weather.rrd | tail -1 | sed 's/^.\{,12\}//' | sed 's/\ U//g' | sed 's/ /,/' |  sed 's/^/Aktuelle Temperatur: /' | sed 's/,/°C\ <\/br>Aktuelle\ Luftfeuchtigkeit\ /' | sed 's/$/%/' > aktuell.html
+rrdtool lastupdate weather.rrd | tail -1 | sed 's/^.\{,12\}//' | sed 's/\ U//g' | awk '{print $1}' | sed 's/$/°C/' > temp.html
+rrdtool lastupdate weather.rrd | tail -1 | sed 's/^.\{,12\}//' | sed 's/\ U//g' | sed 's/^.*\ //' | sed 's/$/%/' > humid.html
+
+
 # Transfer the graphs to my webserver and clean up aterwards 
 scp *png phil@95.143.172.12:~/html/wetter/
+scp *html phil@95.143.172.12:~/html/wetter
 rm *.png
+rm *.html
