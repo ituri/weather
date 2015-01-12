@@ -1,6 +1,7 @@
 #!/bin/sh
 # Drawgraph.sh - Philipp (2014)
 cd /home/pi/wetter
+midnight="$(/bin/date -d 00:00 +%s)"
 
 # Generate graphs for temperatures
 # temperatures of the last hour
@@ -8,40 +9,41 @@ rrdtool graph 't-1h.png' \
 	--width '400' \
 	--height '108' \
 	--start end-1h \
-	'DEF:Wohnzimmer=weather.rrd:temps1:AVERAGE' \
-	'LINE1:Wohnzimmer#CC0000:Straßenseite'
+	DEF:Wohnzimmer=weather.rrd:temps1:AVERAGE \
+	LINE1:Wohnzimmer#CC0000:Straßenseite
 
 # temperatures of the last 4 hours
 rrdtool graph 't-4h.png' \
 	--width '400' \
 	--height '108' \
 	--start end-4h \
-	'DEF:Wohnzimmer=weather.rrd:temps1:AVERAGE' \
-	'LINE1:Wohnzimmer#CC0000:Straßenseite'
+	DEF:Wohnzimmer=weather.rrd:temps1:AVERAGE \
+	LINE1:Wohnzimmer#CC0000:Straßenseite
 
 # temperatures of the last day
 rrdtool graph 't-1d.png' \
 	--width '400' \
 	--height '108' \
 	--start end-1d \
-	'DEF:Wohnzimmer=weather.rrd:temps1:AVERAGE' \
-	'LINE1:Wohnzimmer#CC0000:Straßenseite'
+	DEF:Wohnzimmer=weather.rrd:temps1:AVERAGE \
+	LINE1:Wohnzimmer#CC0000:Straßenseite \
+	VRULE:$midnight#000000::dashes
 
 # temperatures of the last week
 rrdtool graph 't-1w.png' \
 	--width '400' \
 	--height '108' \
 	--start end-7d \
-	'DEF:Wohnzimmer=weather.rrd:temps1:AVERAGE' \
-	'LINE1:Wohnzimmer#CC0000:Straßenseite'
+	DEF:Wohnzimmer=weather.rrd:temps1:AVERAGE \
+	LINE1:Wohnzimmer#CC0000:Straßenseite \
 
 # temperatures of the last month
 rrdtool graph 't-1m.png' \
 	--width '400' \
 	--height '108' \
-	--start end-1m \
-	'DEF:Wohnzimmer=weather.rrd:temps1:AVERAGE' \
-	'LINE1:Wohnzimmer#CC0000:Straßenseite'
+	--start end-4w \
+	DEF:Wohnzimmer=weather.rrd:temps1:AVERAGE \
+	LINE1:Wohnzimmer#CC0000:Straßenseite
 
 # Generate graphs for humidity
 # hourly humidity
@@ -49,40 +51,41 @@ rrdtool graph 'h-1h.png' \
 	--width '400' \
 	--height '108' \
 	--start end-1h \
-	'DEF:Wohnzimmer=weather.rrd:hums1:AVERAGE' \
-	'LINE1:Wohnzimmer#33CCFF:Straßenseite'
+	DEF:Wohnzimmer=weather.rrd:hums1:AVERAGE \
+	LINE1:Wohnzimmer#33CCFF:Straßenseite
 
 # humidity of the last 4 hours
 rrdtool graph 'h-4h.png' \
 	--width '400' \
 	--height '108' \
 	--start end-4h \
-	'DEF:Wohnzimmer=weather.rrd:hums1:AVERAGE' \
-	'LINE1:Wohnzimmer#33CCFF:Straßenseite'
+	DEF:Wohnzimmer=weather.rrd:hums1:AVERAGE \
+	LINE1:Wohnzimmer#33CCFF:Straßenseite
 
 # humidity of the last day
 rrdtool graph 'h-1d.png' \
 	--width '400' \
 	--height '108' \
 	--start end-1d \
-	'DEF:Wohnzimmer=weather.rrd:hums1:AVERAGE' \
-	'LINE1:Wohnzimmer#33CCFF:Straßenseite'
+	DEF:Wohnzimmer=weather.rrd:hums1:AVERAGE \
+	LINE1:Wohnzimmer#33CCFF:Straßenseite \
+	VRULE:$midnight#000000::dashes
 
 # humidity of the last week
 rrdtool graph 'h-1w.png' \
 	--width '400' \
 	--height '108' \
 	--start end-7d \
-	'DEF:Wohnzimmer=weather.rrd:hums1:AVERAGE' \
-	'LINE1:Wohnzimmer#33CCFF:Straßenseite'
+	DEF:Wohnzimmer=weather.rrd:hums1:AVERAGE \
+	LINE1:Wohnzimmer#33CCFF:Straßenseite
 
 # humidity of the last month
 rrdtool graph 'h-1m.png' \
 	--width '400' \
 	--height '108' \
 	--start end-1m \
-	'DEF:Wohnzimmer=weather.rrd:hums1:AVERAGE' \
-	'LINE1:Wohnzimmer#33CCFF:Straßenseite'
+	DEF:Wohnzimmer=weather.rrd:hums1:AVERAGE \
+	LINE1:Wohnzimmer#33CCFF:Straßenseite
 
 # Generate the html-file for the current temperature (The string manipulation is REALLY ugly - you have been warned!)
 rrdtool lastupdate weather.rrd | tail -1 | sed 's/^.\{,12\}//' | sed 's/\ U//g' | awk '{print $1}' | sed 's/$/°C/' > temp.html
